@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,19 +9,19 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import styles from './styles';
-import {storeData, getStorageData} from '../../../../utilities/SecureStorage';
+import { storeData, getStorageData } from '../../../../utilities/SecureStorage';
 
-const LoginView = ({navigation}) => {
+const LoginView = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const [loginError, setLoginError] = useState(false);
 
   // check validation
-   const handlValidate = async () => {
+  const handlValidate = async () => {
     if (username.trim() !== '' && password.trim() !== '') {
       // error: storedata does not work, userInfo is null
-      await storeData('userInfo', {username: username, password: password});
+      await storeData('userInfo', { username: username, password: password });
       console.log('userInfo: ' + getStorageData('userInfo'));
       navigation.navigate('Home', {
         screen: 'HomeView',
@@ -56,24 +56,23 @@ const LoginView = ({navigation}) => {
     };
   };
 
-  const {passwordVisibility, rightIcon, handlePasswordVisibility} =
+  const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
 
-  useEffect(() => {
-    const getAuthData = async () =>{
-    return await getStorageData('userInfo')
-    }
-    
-    const authData = getAuthData()
-    
+  useEffect(async () => {
+    const authData = await getStorageData('userInfo');
+
     if (authData != null) {
-    navigation.navigate('Home', {screen: 'HomeView'})
+      navigation.navigate('Home', {
+        screen: 'HomeView',
+        params: { username: authData?.username },
+      });
     }
-    }, [])
+  }, [])
 
   return (
     <View style={styles.container}>
-      <Text style={{fontSize: 30, marginBottom: 50}}>Login Screen</Text>
+      <Text style={{ fontSize: 30, marginBottom: 50 }}>Login Screen</Text>
 
       <View style={styles.inputView}>
         <TextInput

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -18,15 +17,11 @@ import { useCameraPermissions } from '../../../../hooks/useCameraPermissions';
 import { useImagePickerWithActionSheet } from '../../../../hooks/useImagePickerWithActionSheet';
 
 const HomeView = connectActionSheet(({ navigation, route, showActionSheetWithOptions }) => {
-
   const includeBase64 = true;
   const [image, setImage] = useState(null);
   const userProfilePicture = (require('../../../../imgs/gratisography-cyber-kitty-800x525.jpg'));
   const dispatch = useDispatch();
-  
-
   const { requestCameraPermission } = useCameraPermissions();
-
   const { pickImage } = useImagePickerWithActionSheet(showActionSheetWithOptions, ImagePicker, includeBase64);
 
   const onChangeImagePress = () => {
@@ -50,17 +45,6 @@ const HomeView = connectActionSheet(({ navigation, route, showActionSheetWithOpt
     await removeData('userInfo');
     navigation.navigate('Auth', { screen: 'LoginView' });
   }
-
-  useEffect(
-    () =>
-      {
-        const checkLogIn = async() => {
-          const userInfo = await getStorageData('userInfo');
-        }
-        checkLogIn();
-      },
-    []
-  );
 
   return (
     <View>
