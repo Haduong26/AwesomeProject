@@ -20,10 +20,10 @@ const HomeView = connectActionSheet(({ navigation, route, showActionSheetWithOpt
   const includeBase64 = true;
   const [image, setImage] = useState(null);
   const userProfilePicture = (require('../../../../imgs/gratisography-cyber-kitty-800x525.jpg'));
-  const dispatch = useDispatch();
   const { requestCameraPermission } = useCameraPermissions();
   const { pickImage } = useImagePickerWithActionSheet(showActionSheetWithOptions, ImagePicker, includeBase64);
-
+  const [username, setUsername] = useState('User');
+  
   const onChangeImagePress = () => {
     requestCameraPermission().then((result) => {
       if (result === true) {
@@ -33,13 +33,20 @@ const HomeView = connectActionSheet(({ navigation, route, showActionSheetWithOpt
               avatar: _image.data,
               uri: _image.path,
             };
-            dispatch(updateImage(attributes));
             setImage(attributes);
           }
         });
       }
     });
   };
+
+  const getAuthData = async () => {
+    const authData = await getStorageData('userInfo');
+    setUsername(authData?.username);
+  }
+  useEffect(() => {
+    getAuthData();
+  }, [])
 
   const handleLogout = async() => {
     await removeData('userInfo');
@@ -60,7 +67,7 @@ const HomeView = connectActionSheet(({ navigation, route, showActionSheetWithOpt
               source={require('../../../../imgs/camera.png')}/> */}
         </TouchableOpacity>
         <Text>
-          Welcome {route?.params?.username}
+          Welcome {username}
         </Text>
       </View>
       <View style={styles.buttonContainer}>

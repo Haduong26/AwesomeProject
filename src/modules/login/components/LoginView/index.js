@@ -20,12 +20,9 @@ const LoginView = ({ navigation }) => {
   // check validation
   const handlValidate = async () => {
     if (username.trim() !== '' && password.trim() !== '') {
-      // error: storedata does not work, userInfo is null
       await storeData('userInfo', { username: username, password: password });
-      console.log('userInfo: ' + getStorageData('userInfo'));
       navigation.navigate('Home', {
-        screen: 'HomeView',
-        params: { username: username },
+        screen: 'HomeView'
       });
     } else {
       setLoginError(true);
@@ -59,15 +56,18 @@ const LoginView = ({ navigation }) => {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
 
-  useEffect(async () => {
+  const checkLoggin = async () => {
     const authData = await getStorageData('userInfo');
-
     if (authData != null) {
       navigation.navigate('Home', {
         screen: 'HomeView',
         params: { username: authData?.username },
       });
     }
+  }
+
+  useEffect( () => {
+    checkLoggin();
   }, [])
 
   return (
